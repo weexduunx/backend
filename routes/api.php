@@ -7,6 +7,7 @@ use App\Http\Controllers\API\VerseController;
 use App\Http\Controllers\API\TafsirController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\WordSyncController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -53,5 +54,15 @@ Route::prefix('v1')->group(function () {
         Route::delete('/{id}', [FavoriteController::class, 'destroy']);
         Route::get('/verses', [FavoriteController::class, 'getFavoriteVerses']);
         Route::get('/surahs', [FavoriteController::class, 'getFavoriteSurahs']);
+    });
+
+    // Word synchronization routes
+    Route::prefix('word-sync')->group(function () {
+        Route::post('/timing-data', [WordSyncController::class, 'getVerseTimingData']);
+        Route::post('/current-word', [WordSyncController::class, 'getCurrentWord']);
+        Route::get('/reciters', [WordSyncController::class, 'getReciterProfiles']);
+        Route::get('/reciters/{code}', [WordSyncController::class, 'getReciterProfile']);
+        Route::delete('/cache', [WordSyncController::class, 'clearCache']);
+        Route::get('/stats', [WordSyncController::class, 'getStats']);
     });
 });

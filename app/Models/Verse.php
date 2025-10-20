@@ -30,4 +30,9 @@ class Verse extends Model
     {
         return $this->hasMany(Favorite::class);
     }
+
+    public function verseWordTimings(): HasMany
+    {
+        return $this->hasMany(VerseWordTiming::class);
+    }
 }
