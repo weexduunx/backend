@@ -15,6 +15,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Services\WordSyncService::class, function ($app) {
             return new \App\Services\WordSyncService();
         });
+
+        $this->app->singleton(\App\Services\EnhancedWordSyncService::class, function ($app) {
+            return new \App\Services\EnhancedWordSyncService();
+        });
     }
 
     /**

@@ -162,7 +162,7 @@ class WordSyncService
     /**
      * Nettoie le texte arabe
      */
-    private function cleanArabicText(string $text): string
+    protected function cleanArabicText(string $text): string
     {
         return trim(preg_replace([
             '/[\x{064B}-\x{0652}\x{0670}\x{0640}]/u', // Supprimer diacritiques
@@ -176,7 +176,7 @@ class WordSyncService
     /**
      * Calcule le poids d'un mot pour déterminer sa durée relative
      */
-    private function calculateWordWeight(string $word, int $index, array $allWords): float
+    protected function calculateWordWeight(string $word, int $index, array $allWords): float
     {
         $weight = 1.0;
 
@@ -233,7 +233,7 @@ class WordSyncService
     /**
      * Détecte les informations tajweed dans un mot
      */
-    private function detectTajweedInfo(string $word): array
+    protected function detectTajweedInfo(string $word): array
     {
         // Pauses obligatoires et arrêts
         if (mb_strpos($word, 'ۚ') !== false || mb_strpos($word, 'ۘ') !== false) {
@@ -289,7 +289,7 @@ class WordSyncService
     /**
      * Formate la réponse des données de timing
      */
-    private function formatTimingResponse(VerseWordTiming $timing): array
+    protected function formatTimingResponse(VerseWordTiming $timing): array
     {
         return [
             'verse_id' => $timing->verse_id,

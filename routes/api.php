@@ -8,6 +8,7 @@ use App\Http\Controllers\API\TafsirController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\WordSyncController;
+use App\Http\Controllers\API\EnhancedWordSyncController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -64,5 +65,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/reciters/{code}', [WordSyncController::class, 'getReciterProfile']);
         Route::delete('/cache', [WordSyncController::class, 'clearCache']);
         Route::get('/stats', [WordSyncController::class, 'getStats']);
+    });
+
+    // Enhanced word synchronization routes with package data
+    Route::prefix('enhanced-word-sync')->group(function () {
+        Route::post('/timing-data', [EnhancedWordSyncController::class, 'getEnhancedTimingData']);
+        Route::post('/current-word', [EnhancedWordSyncController::class, 'getEnhancedCurrentWord']);
+        Route::post('/position-mapping', [EnhancedWordSyncController::class, 'getWordPositionMapping']);
+        Route::post('/bulk-process', [EnhancedWordSyncController::class, 'bulkProcessVerses']);
+        Route::delete('/cache', [EnhancedWordSyncController::class, 'clearEnhancedCache']);
+        Route::get('/stats', [EnhancedWordSyncController::class, 'getEnhancedStats']);
     });
 });

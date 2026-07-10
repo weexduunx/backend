@@ -9,6 +9,7 @@ class ReciterProfile extends Model
 {
     protected $fillable = [
         'code',
+        'quran_com_recitation_id',
         'name',
         'average_speed',
         'pause_multiplier',
