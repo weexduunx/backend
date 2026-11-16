@@ -26,6 +26,11 @@ return new class extends Migration
             $table->unique(['verse_id', 'reciter_profile_id']);
             $table->index(['verse_id', 'source']);
         });
+
+        // word_timings est créée avant cette table : on ajoute sa FK ici
+        Schema::table('word_timings', function (Blueprint $table) {
+            $table->foreign('verse_word_timing_id')->references('id')->on('verse_word_timings')->onDelete('cascade');
+        });
     }
 
     /**
@@ -33,6 +38,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('word_timings', function (Blueprint $table) {
+            $table->dropForeign(['verse_word_timing_id']);
+        });
         Schema::dropIfExists('verse_word_timings');
     }
 };

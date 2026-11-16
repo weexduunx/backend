@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('word_timings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('verse_word_timing_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('verse_word_timing_id'); // FK ajoutée dans create_verse_word_timings_table (créée après)
             $table->integer('word_index'); // position du mot dans le verset
             $table->string('arabic_text'); // texte arabe du mot
             $table->integer('start_time'); // temps de début en ms
