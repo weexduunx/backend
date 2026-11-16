@@ -56,7 +56,8 @@ class TranslateTafsirDeepl extends Command
         $sent = 0;
 
         foreach ($pending->lazyById(self::BATCH * 4)->chunk(self::BATCH) as $rows) {
-            $rows = $rows->values();
+            // chunk() d'une LazyCollection renvoie une LazyCollection : accès par index impossible
+            $rows = $rows->values()->collect();
             $batchChars = $rows->sum(fn ($r) => mb_strlen($r->text_original));
             if ($maxChars && $sent + $batchChars > $maxChars) {
                 break;
@@ -80,7 +81,14 @@ class TranslateTafsirDeepl extends Command
                 return self::FAILURE;
             }
 
-            foreach ($res->json('translations', []) as $i => $t) {
+            $translations = $res->json('translations', []);
+            if (count($translations) !== $rows->count()) {
+                $this->error('Réponse DeepL incomplète : '.count($translations).' traductions pour '.$rows->count().' textes.');
+
+                return self::FAILURE;
+            }
+
+            foreach ($translations as $i => $t) {
                 $rows[$i]->update([
                     'text_translated' => $t['text'],
                     'translator' => 'deepl',
