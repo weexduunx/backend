@@ -105,3 +105,33 @@ Remplacez l'adresse locale par l'adresse en ligne, à deux endroits :
 
 Puis refaites l'APK : `npx eas-cli build -p android --profile preview`.
 Tant que le backend n'est pas en ligne, l'application charge le texte depuis Quran.com : elle reste utilisable.
+
+## Avis des bêta-testeurs (ajouté le 13/11/2026)
+
+L'app envoie les avis à `POST /api/v1/feedback` (sans compte, 10 envois par minute et par IP).
+Les avis se lisent sur une page protégée : **https://<votre-domaine>/admin/avis**
+
+1. Envoyez sur le serveur les nouveaux fichiers :
+   - `app/Models/AppFeedback.php`
+   - `app/Http/Controllers/API/FeedbackController.php`
+   - `app/Http/Controllers/Admin/FeedbackAdminController.php`
+   - `resources/views/admin/` (3 fichiers)
+   - `database/migrations/2026_11_13_120000_create_app_feedback_table.php`
+   - `routes/api.php`, `routes/web.php`, `config/services.php`
+2. Dans le `.env` du serveur, choisissez un mot de passe long (sans lui, la page admin renvoie 404) :
+   ```
+   FEEDBACK_ADMIN_PASSWORD=un-mot-de-passe-long-et-unique
+   ```
+3. Dans le terminal cPanel (ou via « Setup PHP App ») :
+   ```
+   php artisan migrate --path=database/migrations/2026_11_13_120000_create_app_feedback_table.php --force
+   php artisan config:clear && php artisan route:clear && php artisan view:clear
+   ```
+   (`--path` ne lance que cette migration : la base de production existe déjà.)
+4. Vérification rapide :
+   ```
+   curl -X POST https://<votre-domaine>/api/v1/feedback -H "Content-Type: application/json" -H "Accept: application/json" -d '{"rating":5,"message":"test déploiement"}'
+   ```
+   Réponse attendue : `{"success":true,...}` (code 201). Le test apparaît dans /admin/avis.
+
+L'export CSV (bouton « Exporter en CSV ») s'ouvre directement dans Excel.

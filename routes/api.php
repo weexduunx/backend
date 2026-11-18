@@ -7,6 +7,7 @@ use App\Http\Controllers\API\VerseController;
 use App\Http\Controllers\API\TafsirController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\FeedbackController;
 use App\Http\Controllers\API\WordSyncController;
 use App\Http\Controllers\API\EnhancedWordSyncController;
 
@@ -15,6 +16,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
+
+    // Avis des bêta-testeurs (sans compte, limité à 10 envois par minute et par adresse IP)
+    Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('throttle:10,1');
 
     // Authentication routes
     Route::prefix('auth')->group(function () {

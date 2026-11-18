@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    // Page d'administration des avis bêta (/admin/avis). Vide = page désactivée.
+    'feedback' => [
+        'admin_password' => env('FEEDBACK_ADMIN_PASSWORD'),
+    ],
+
 ];
