@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\SurahController;
 use App\Http\Controllers\API\VerseController;
 use App\Http\Controllers\API\TafsirController;
+use App\Http\Controllers\API\TafsirTranslationController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FeedbackController;
@@ -53,22 +54,17 @@ Route::prefix('v1')->group(function () {
         Route::get('/hafiz/{hafizName}', [TafsirController::class, 'getByHafiz']);
     });
 
+    // Tafsirs écrits traduits en français, ex. /v1/tafsir-fr/muyassar/2/255
+    Route::get('/tafsir-fr/{source}/{surah}/{ayah}', [TafsirTranslationController::class, 'show'])
+        ->whereNumber(['surah', 'ayah']);
+    Route::get('/tafsir-fr/{source}/stats', [TafsirTranslationController::class, 'stats']);
+
     Route::middleware('auth:sanctum')->prefix('favorites')->group(function () {
         Route::get('/', [FavoriteController::class, 'index']);
         Route::post('/', [FavoriteController::class, 'store']);
         Route::delete('/{id}', [FavoriteController::class, 'destroy']);
         Route::get('/verses', [FavoriteController::class, 'getFavoriteVerses']);
         Route::get('/surahs', [FavoriteController::class, 'getFavoriteSurahs']);
-    });
-
-    // Word synchronization routes
-    Route::prefix('word-sync')->group(function () {
-        Route::post('/timing-data', [WordSyncController::class, 'getVerseTimingData']);
-        Route::post('/current-word', [WordSyncController::class, 'getCurrentWord']);
-        Route::get('/reciters', [WordSyncController::class, 'getReciterProfiles']);
-        Route::get('/reciters/{code}', [WordSyncController::class, 'getReciterProfile']);
-        Route::delete('/cache', [WordSyncController::class, 'clearCache']);
-        Route::get('/stats', [WordSyncController::class, 'getStats']);
     });
 
     // Enhanced word synchronization routes with package data

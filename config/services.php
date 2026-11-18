@@ -14,6 +14,10 @@ return [
     |
     */
 
+    'deepl' => [
+        'key' => env('DEEPL_API_KEY'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
