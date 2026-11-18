@@ -9,7 +9,6 @@ use App\Http\Controllers\API\TafsirTranslationController;
 use App\Http\Controllers\API\FavoriteController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FeedbackController;
-use App\Http\Controllers\API\WordSyncController;
 use App\Http\Controllers\API\EnhancedWordSyncController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
